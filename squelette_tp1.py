@@ -84,19 +84,15 @@ if __name__ == "__main__":
     datax_train, datay_train = gen_arti(data_type=0, epsilon=0.1)
     datax_test, datay_test = gen_arti(data_type=0, epsilon=0.1)
 
-    # Ajout de la colonne de biais
-    datax_train = np.hstack((np.ones((datax_train.shape[0], 1)), datax_train))
-    datax_test = np.hstack((np.ones((datax_test.shape[0], 1)), datax_test))
-
-    # Entraînement de la régression linéaire
+    # Entraînement de la régression linéaire sans biais
     w_mse, costs_mse_train, costs_mse_test, rates_mse_train, rates_mse_test = gradient_descent(
         datax_train, datay_train, datax_test, datay_test, mse, mse_grad)
     
-    # Entraînement du coût hinge-loss
+    # Entraînement du coût hinge-loss sans biais
     w_hinge, costs_hinge_train, costs_hinge_test, rates_hinge_train, rates_hinge_test = gradient_descent(
         datax_train, datay_train, datax_test, datay_test, hinge, hinge_grad)
 
-    # Entraînement du coût de régression logistique
+    # Entraînement du coût de régression logistique sans biais
     w_reglog, costs_reglog_train, costs_reglog_test, rates_reglog_train, rates_reglog_test = gradient_descent(
         datax_train, datay_train, datax_test, datay_test, reglog, reglog_grad)
 
@@ -104,13 +100,13 @@ if __name__ == "__main__":
     plt.figure(figsize=(18, 18))
 
     plt.subplot(3, 4, 1)
-    plot_frontiere(datax_train[:, 1:], lambda x: np.sign(x.dot(w_mse[1:])), step=100)
-    plot_data(datax_train[:, 1:], datay_train)
+    plot_frontiere(datax_train, lambda x: np.sign(x.dot(w_mse)), step=100)
+    plot_data(datax_train, datay_train)
     plt.title('Régression Linéaire - Entraînement (MSE)')
 
     plt.subplot(3, 4, 2)
-    plot_frontiere(datax_test[:, 1:], lambda x: np.sign(x.dot(w_mse[1:])), step=100)
-    plot_data(datax_test[:, 1:], datay_test)
+    plot_frontiere(datax_test, lambda x: np.sign(x.dot(w_mse)), step=100)
+    plot_data(datax_test, datay_test)
     plt.title('Régression Linéaire - Test (MSE)')
   
     plt.subplot(3, 4, 3)
@@ -121,13 +117,13 @@ if __name__ == "__main__":
     plt.figure(figsize=(18, 18))
 
     plt.subplot(3, 4, 1)
-    plot_frontiere(datax_train[:, 1:], lambda x: np.sign(x.dot(w_hinge[1:])), step=100)
-    plot_data(datax_train[:, 1:], datay_train)
+    plot_frontiere(datax_train, lambda x: np.sign(x.dot(w_hinge)), step=100)
+    plot_data(datax_train, datay_train)
     plt.title('Hinge Loss - Entraînement')
  
     plt.subplot(3, 4, 2)
-    plot_frontiere(datax_test[:, 1:], lambda x: np.sign(x.dot(w_hinge[1:])), step=100)
-    plot_data(datax_test[:, 1:], datay_test)
+    plot_frontiere(datax_test, lambda x: np.sign(x.dot(w_hinge)), step=100)
+    plot_data(datax_test, datay_test)
     plt.title('Hinge Loss - Test')
     
     plt.subplot(3, 4, 3)
@@ -138,13 +134,13 @@ if __name__ == "__main__":
     plt.figure(figsize=(18, 18))
 
     plt.subplot(3, 4, 1)
-    plot_frontiere(datax_train[:, 1:], lambda x: np.sign(x.dot(w_reglog[1:])), step=100)
-    plot_data(datax_train[:, 1:], datay_train)
+    plot_frontiere(datax_train, lambda x: np.sign(x.dot(w_reglog)), step=100)
+    plot_data(datax_train, datay_train)
     plt.title('Régression Logistique - Entraînement')
    
     plt.subplot(3, 4, 2)
-    plot_frontiere(datax_test[:, 1:], lambda x: np.sign(x.dot(w_reglog[1:])), step=100)
-    plot_data(datax_test[:, 1:], datay_test)
+    plot_frontiere(datax_test, lambda x: np.sign(x.dot(w_reglog)), step=100)
+    plot_data(datax_test, datay_test)
     plt.title('Régression Logistique - Test')
 
     plt.subplot(3, 4, 3)
@@ -152,3 +148,5 @@ if __name__ == "__main__":
     plt.title('Régression Logistique - Coût et Classification')
 
     plt.show()
+
+
